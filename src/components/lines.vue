@@ -87,6 +87,19 @@ export default {
       this.mouseYNormalized = -(event.clientY / window.innerHeight) * 2 + 1; // Note the negative as the screen's y-coordinate goes from top to bottom.
     },
 
+    touchMove(event) {
+      // Prevent the default scrolling on touch move
+      event.preventDefault();
+
+      // The event.touches is a list of all current touch points.
+      // For simplicity, we're only considering the first touch point.
+      const touch = event.touches[0];
+
+      // Normalize the touch coordinates from -1 to 1
+      this.mouseXNormalized = (touch.clientX / window.innerWidth) * 2 - 1;
+      this.mouseYNormalized = -(touch.clientY / window.innerHeight) * 2 + 1; // Negative because the screen's y-coordinate goes from top to bottom.
+    },
+
     moveBackLines() {
       for (let i = 0; i < this.loopsThreeRotated.length; i++) {
         for (let j = 0; j < this.loopsThreeRotated[i].length; j++) {
@@ -175,6 +188,7 @@ export default {
 
       window.addEventListener("resize", this.onWindowResize);
       window.addEventListener("mousemove", this.mouseMove);
+      window.addEventListener("touchmove", this.touchMove, { passive: false });
     },
     animate() {
       let me = this;
